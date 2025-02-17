@@ -1,0 +1,131 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}AgroSmart - Dashboard{% endblock %}
+{% block content %}
+
+<!-- Sidebar Toggle Button (Mobile) -->
+<div class="sidebar-toggle" onclick="toggleSidebar()">☰</div>
+
+<div class="dashboard-container">
+    <!-- ========== SIDEBAR ========== -->
+    <aside class="sidebar" id="sidebar">
+        <h3>My Dashboard</h3>
+        <a href="#" class="active"><i class="fas fa-home"></i> Overview</a>
+        <a href="#"><i class="fas fa-chart-bar"></i> Analytics</a>
+        <a href="#"><i class="fas fa-seedling"></i> Crop Data</a>
+        <a href="#"><i class="fas fa-tint"></i> Irrigation</a>
+        <a href="#"><i class="fas fa-user-cog"></i> Settings</a>
+        
+        <a href={% url "logout_view" %}><i class="fas fa-sign-out-alt"></i> Logout</a>
+    </aside>
+
+    <!-- ========== MAIN CONTENT ========== -->
+    <main class="main-content">
+        <!-- Dashboard Header -->
+        <div class="dashboard-header">
+            <h2>Welcome, {{ user.username }}!</h2>
+        </div>
+
+        <!-- SENSOR DATA CARDS -->
+        <div class="cards-row">
+            <!-- Example sensor data -->
+            <div class="card">
+                <h3><i class="fas fa-seedling"></i> Soil Moisture</h3>
+                <p>{{ sensor_data.moisture }}%</p>
+            </div>
+            <div class="card">
+                <h3><i class="fas fa-thermometer-half"></i> Temperature</h3>
+                <p>{{ sensor_data.temperature }}°C</p>
+            </div>
+            <div class="card">
+                <h3><i class="fas fa-tint"></i> Humidity</h3>
+                <p>{{ sensor_data.humidity }}%</p>
+            </div>
+        </div>
+
+        <!-- ALERTS & CONTROLS SECTION -->
+        <h3 style="color:#2E7D32; margin-bottom:1rem;">Alerts & Controls</h3>
+        <div class="alerts-controls">
+            <!-- CATTLE ALERT -->
+            <div class="alert-card" id="cattleAlertCard">
+                <i class="fas fa-horse alert-icon"></i>
+                <h3>Cattle Alert</h3>
+                <div class="alert-status" id="cattleAlertStatus"
+                     style="color: {% if sensor_data.cattle_alert %} #dc3545 {% else %} #333 {% endif %}">
+                    {% if sensor_data.cattle_alert %} ALERT! {% else %} No Alert {% endif %}
+                </div>
+            </div>
+
+            <!-- FIRE ALERT -->
+            <div class="alert-card" id="fireAlertCard">
+                <i class="fas fa-fire alert-icon"></i>
+                <h3>Fire Alert</h3>
+                <div class="alert-status" id="fireAlertStatus"
+                     style="color: {% if sensor_data.fire_alert %} #dc3545 {% else %} #333 {% endif %}">
+                    {% if sensor_data.fire_alert %} ALERT! {% else %} No Alert {% endif %}
+                </div>
+            </div>
+
+            <!-- WATER PUMP TOGGLE -->
+            <div class="control-card" id="waterPumpCard">
+                <h3>Water Pump</h3>
+                <div class="toggle-switch">
+                    <label class="switch">
+                        <input type="checkbox" id="waterPumpToggle"
+                            {% if sensor_data.pump_status %} checked {% endif %}
+                            onchange="toggleDevice('water_pump')" />
+                        <span class="slider"></span>
+                    </label>
+                    <span class="toggle-switch-label" id="waterPumpLabel">
+                        {% if sensor_data.pump_status %} ON {% else %} OFF {% endif %}
+                    </span>
+                </div>
+            </div>
+
+            <!-- LED TOGGLE -->
+            <div class="control-card" id="ledCard">
+                <h3>LED Light</h3>
+                <div class="toggle-switch">
+                    <label class="switch">
+                        <input type="checkbox" id="ledToggle"
+                            {% if sensor_data.led_status %} checked {% endif %}
+                            onchange="toggleDevice('led')" />
+                        <span class="slider"></span>
+                    </label>
+                    <span class="toggle-switch-label" id="ledLabel">
+                        {% if sensor_data.led_status %} ON {% else %} OFF {% endif %}
+                    </span>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<!-- ========== DASHBOARD SCRIPT ========== -->
+<script>
+    // Toggle on/off devices like water pump and LED
+    function toggleDevice(device) {
+        fetch(`/toggle/${device}/`, {
+            method: "POST",
+            headers: {
+                "X-CSRFToken": "{{ csrf_token }}",
+                "Content-Type": "application/json"
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            const label = document.getElementById(device + "Label");
+            const toggleInput = document.getElementById(device + "Toggle");
+            label.textContent = data.status ? "ON" : "OFF";
+            toggleInput.checked = data.status;
+        });
+    }
+
+    // Sidebar toggle for mobile
+    function toggleSidebar() {
+        const sidebar = document.getElementById("sidebar");
+        sidebar.style.display = sidebar.style.display === "block" ? "none" : "block";
+    }
+</script>
+
+{% endblock %}

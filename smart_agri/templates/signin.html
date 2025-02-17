@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}AgroSmart - Sign In{% endblock %}
+
+{% block content %}
+  <!-- Sign In Container -->
+<div class="auth-container">
+    <div class="auth-box">
+      <div class="auth-header">
+        <h2>Welcome Back!</h2>
+        <p>Sign in to access your smart farming dashboard</p>
+      </div>
+      <form id="signinForm" method="POST">
+        {% csrf_token %}
+        <div class="form-group">
+          <label for="signin-username">Username</label>
+          <input type="text" name="username" class="form-control" placeholder="Enter your username" required/>
+        </div>
+        <div class="form-group">
+          <label for="signin-password">Password</label>
+          <input type="password" name="password" class="form-control" placeholder="Enter your password" required/>
+        </div>
+        <button type="submit" class="btn btn-primary" style="width: 100%;">
+          Sign In
+        </button>
+      </form>
+      <div class="auth-toggle">
+        Don't have an account?
+        <a href="/signup">Sign Up</a>
+      </div>
+    </div>
+  </div>
+{% endblock %}
