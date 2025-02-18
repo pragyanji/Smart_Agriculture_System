@@ -4,13 +4,13 @@
 {% block content %}
 
 <!-- Sidebar Toggle Button (Mobile) -->
-<div class="sidebar-toggle" onclick="toggleSidebar()">☰</div>
+{% comment %} <div class="sidebar-toggle" onclick="toggleSidebar()">☰</div> {% endcomment %}
 
 <div class="dashboard-container">
     <!-- ========== SIDEBAR ========== -->
     
     <aside class="sidebar" id="sidebar">
-        <div class="sidebar-toggle" onclick="toggleSidebar()">☰</div>
+        {% comment %} <div class="sidebar-toggle" onclick="toggleSidebar()">☰</div> {% endcomment %}
         <h3>My Dashboard</h3>
         <a href="#" class="active"><i class="fas fa-home"></i> Overview</a>
         <a href="#"><i class="fas fa-chart-bar"></i> Analytics</a>
@@ -18,7 +18,7 @@
         <a href="#"><i class="fas fa-tint"></i> Irrigation</a>
         <a href="#"><i class="fas fa-user-cog"></i> Settings</a>
         
-        <a href={% url "logout_view" %}><i class="fas fa-sign-out-alt"></i> Logout</a>
+        <a href="{% url 'logout_view' %}"><i class="fas fa-sign-out-alt"></i> Logout</a>
     </aside>
 
     <!-- ========== MAIN CONTENT ========== -->

@@ -50,8 +50,8 @@
   /* Animation for fade-out effect */
   @keyframes fadeOut {
     from { opacity: 1; }
-    to { opacity: 0;
-    display: none;}
+    to { opacity: 0;}
+    /* display: none; */
   }
 /* ================================ */
 /* Global Reset & Fonts            */
