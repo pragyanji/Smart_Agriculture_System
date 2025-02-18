@@ -77,5 +77,5 @@ def toggle_device(request, device):
 
 def logout_view(request):
     logout(request)
-    messages.success(request, 'You have been logged out.')
-    return redirect('/')
+    messages.success(request,'Logout successfull!!')
+    return redirect('signin')
