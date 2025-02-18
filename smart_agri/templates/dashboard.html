@@ -10,7 +10,6 @@
     <!-- ========== SIDEBAR ========== -->
     
     <aside class="sidebar" id="sidebar">
-        {% comment %} <div class="sidebar-toggle" onclick="toggleSidebar()">☰</div> {% endcomment %}
         <h3>My Dashboard</h3>
         <a href="#" class="active"><i class="fas fa-home"></i> Overview</a>
         <a href="#"><i class="fas fa-chart-bar"></i> Analytics</a>
@@ -102,32 +101,4 @@
         </div>
     </main>
 </div>
-
-<!-- ========== DASHBOARD SCRIPT ========== -->
-<script>
-    // Toggle on/off devices like water pump and LED
-    function toggleDevice(device) {
-        fetch(`/toggle/${device}/`, {
-            method: "POST",
-            headers: {
-                "X-CSRFToken": "{{ csrf_token }}",
-                "Content-Type": "application/json"
-            }
-        })
-        .then(response => response.json())
-        .then(data => {
-            const label = document.getElementById(device + "Label");
-            const toggleInput = document.getElementById(device + "Toggle");
-            label.textContent = data.status ? "ON" : "OFF";
-            toggleInput.checked = data.status;
-        });
-    }
-
-    // Sidebar toggle for mobile
-    function toggleSidebar() {
-        const sidebar = document.getElementById("sidebar");
-        sidebar.style.display = sidebar.style.display === "block" ? "none" : "block";
-    }
-</script>
-
 {% endblock %}
